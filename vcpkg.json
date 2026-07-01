@@ -1,0 +1,7 @@
+{
+    "name": "mediadockcompanion",
+    "version": "0.1.0",
+    "dependencies": [
+        "cppwinrt"
+    ]
+}
