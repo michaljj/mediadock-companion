@@ -44,4 +44,5 @@ target_link_libraries(MediaDockCompanion PRIVATE
     setupapi
     hid
     comctl32
+    RuntimeObject
 )
