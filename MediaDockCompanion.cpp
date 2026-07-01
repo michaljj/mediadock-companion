@@ -7,6 +7,7 @@
 #include "DeviceManager.h"
 #include "StateStore.h"
 #include "AudioMonitor.h"
+#include "MediaMonitor.h"
 
 #include <windows.h>
 #include <shellapi.h>
@@ -23,6 +24,7 @@ namespace {
     HDEVNOTIFY g_devNotify = nullptr;
     StateStore g_state;
     AudioMonitor g_audio;
+    MediaMonitor g_media;
 
     // GUID_DEVINTERFACE_COMPORT (ntddser.h) — declared inline to avoid initguid.
     const GUID kComPortIface = {
@@ -152,6 +154,7 @@ int main() {
     RegisterComPortNotifications(hwnd);
     OnDeviceArrived(); // device may already be connected at launch
     g_audio.Start(hwnd, &g_state);
+    g_media.Start(hwnd, &g_state);
 
     MSG msg;
     while (GetMessageW(&msg, nullptr, 0, 0) > 0) {
@@ -159,6 +162,7 @@ int main() {
         DispatchMessageW(&msg);
     }
 
+    g_media.Stop();
     g_audio.Stop();
     if (g_devNotify) UnregisterDeviceNotification(g_devNotify);
     g_device.ClosePort();

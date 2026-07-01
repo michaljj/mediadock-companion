@@ -18,6 +18,7 @@ add_executable (MediaDockCompanion
     "DeviceManager.cpp" "DeviceManager.h"
     "StateStore.cpp" "StateStore.h"
     "AudioMonitor.cpp" "AudioMonitor.h"
+    "MediaMonitor.cpp" "MediaMonitor.h"
     "Util.cpp" "Util.h"
 )
 
