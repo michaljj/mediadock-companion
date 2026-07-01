@@ -19,6 +19,7 @@ add_executable (MediaDockCompanion
     "StateStore.cpp" "StateStore.h"
     "AudioMonitor.cpp" "AudioMonitor.h"
     "MediaMonitor.cpp" "MediaMonitor.h"
+    "Serializer.cpp" "Serializer.h"
     "Util.cpp" "Util.h"
 )
 

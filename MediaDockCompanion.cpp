@@ -8,6 +8,7 @@
 #include "StateStore.h"
 #include "AudioMonitor.h"
 #include "MediaMonitor.h"
+#include "Serializer.h"
 
 #include <windows.h>
 #include <shellapi.h>
@@ -41,10 +42,23 @@ namespace {
         if (!g_devNotify) Log("ERROR", "RegisterDeviceNotification failed");
     }
 
-    // Scan + open when a matching device arrives.
+    // Writes the full current state to the dock, ignoring the dirty flag.
+    void SendNow() {
+        if (!g_device.IsConnected()) return;
+        if (!WriteToDevice(g_device.Handle(), SerializeState(g_state.Snapshot()))) {
+            g_device.ClosePort();
+        }
+    }
+
+    // Writes only when state actually changed since the last send.
+    void SendIfDirty() {
+        if (g_device.IsConnected() && g_state.TakeDirty()) SendNow();
+    }
+
+    // Scan + open when a matching device arrives; push full state immediately.
     void OnDeviceArrived() {
         if (auto port = ScanForDevice(Config::VID, Config::PID)) {
-            g_device.OpenPort(*port);
+            if (g_device.OpenPort(*port)) SendNow();
         }
     }
 
@@ -100,6 +114,10 @@ namespace {
 
         case WM_APP_DEVICE_REMOVED:
             g_device.ClosePort();
+            return 0;
+
+        case WM_APP_STATE_CHANGED:
+            SendIfDirty();
             return 0;
 
         case WM_COMMAND:
