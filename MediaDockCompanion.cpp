@@ -9,6 +9,7 @@
 #include "AudioMonitor.h"
 #include "MediaMonitor.h"
 #include "Serializer.h"
+#include "Startup.h"
 
 #include <windows.h>
 #include <shellapi.h>
@@ -82,7 +83,8 @@ namespace {
         GetCursorPos(&pt);
         HMENU menu = CreatePopupMenu();
         AppendMenuW(menu, MF_STRING, IDM_SHOW, L"Show");
-        AppendMenuW(menu, MF_STRING, IDM_AUTOSTART, L"Start with Windows");
+        AppendMenuW(menu, MF_STRING | (IsAutostartEnabled() ? MF_CHECKED : 0),
+                    IDM_AUTOSTART, L"Start with Windows");
         AppendMenuW(menu, MF_SEPARATOR, 0, nullptr);
         AppendMenuW(menu, MF_STRING, IDM_EXIT, L"Exit");
 
@@ -124,6 +126,9 @@ namespace {
             switch (LOWORD(wparam)) {
             case IDM_SHOW:
                 Log("INFO", "Show clicked");
+                return 0;
+            case IDM_AUTOSTART:
+                SetAutostart(!IsAutostartEnabled());
                 return 0;
             case IDM_EXIT:
                 Log("INFO", "Exit clicked");

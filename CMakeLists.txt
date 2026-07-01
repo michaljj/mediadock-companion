@@ -20,6 +20,7 @@ add_executable (MediaDockCompanion
     "AudioMonitor.cpp" "AudioMonitor.h"
     "MediaMonitor.cpp" "MediaMonitor.h"
     "Serializer.cpp" "Serializer.h"
+    "Startup.cpp" "Startup.h"
     "Util.cpp" "Util.h"
 )
 
