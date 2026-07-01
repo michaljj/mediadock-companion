@@ -5,10 +5,13 @@
 #include "Config.h"
 #include "Logger.h"
 #include "DeviceManager.h"
+#include "StateStore.h"
+#include "AudioMonitor.h"
 
 #include <windows.h>
 #include <shellapi.h>
 #include <dbt.h>
+#include <objbase.h>
 
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "user32.lib")
@@ -18,6 +21,8 @@ namespace {
     NOTIFYICONDATAW g_nid = {};
     DeviceManager g_device;
     HDEVNOTIFY g_devNotify = nullptr;
+    StateStore g_state;
+    AudioMonitor g_audio;
 
     // GUID_DEVINTERFACE_COMPORT (ntddser.h) — declared inline to avoid initguid.
     const GUID kComPortIface = {
@@ -119,6 +124,14 @@ namespace {
 int main() {
     Log("INFO", "startup");
 
+    // UI thread is STA (window + tray + Core Audio). WinRT SMTC runs on its
+    // own MTA worker thread (see MediaMonitor) to avoid apartment conflict.
+    HRESULT hrCom = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    if (FAILED(hrCom)) {
+        Log("ERROR", "CoInitializeEx failed");
+        return 1;
+    }
+
     HINSTANCE hInst = GetModuleHandleW(nullptr);
 
     WNDCLASSW wc = {};
@@ -138,6 +151,7 @@ int main() {
     AddTrayIcon(hwnd);
     RegisterComPortNotifications(hwnd);
     OnDeviceArrived(); // device may already be connected at launch
+    g_audio.Start(hwnd, &g_state);
 
     MSG msg;
     while (GetMessageW(&msg, nullptr, 0, 0) > 0) {
@@ -145,8 +159,10 @@ int main() {
         DispatchMessageW(&msg);
     }
 
+    g_audio.Stop();
     if (g_devNotify) UnregisterDeviceNotification(g_devNotify);
     g_device.ClosePort();
+    CoUninitialize();
 
     Log("INFO", "shutdown");
     return 0;
