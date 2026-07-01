@@ -15,6 +15,7 @@ add_executable (MediaDockCompanion
     "MediaDockCompanion.cpp" "MediaDockCompanion.h"
     "Config.h"
     "Logger.cpp" "Logger.h"
+    "DeviceManager.cpp" "DeviceManager.h"
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

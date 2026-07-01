@@ -4,9 +4,11 @@
 #include "MediaDockCompanion.h"
 #include "Config.h"
 #include "Logger.h"
+#include "DeviceManager.h"
 
 #include <windows.h>
 #include <shellapi.h>
+#include <dbt.h>
 
 #pragma comment(lib, "shell32.lib")
 #pragma comment(lib, "user32.lib")
@@ -14,6 +16,30 @@
 namespace {
     const wchar_t* kWindowClass = L"MediaDockCompanionWnd";
     NOTIFYICONDATAW g_nid = {};
+    DeviceManager g_device;
+    HDEVNOTIFY g_devNotify = nullptr;
+
+    // GUID_DEVINTERFACE_COMPORT (ntddser.h) — declared inline to avoid initguid.
+    const GUID kComPortIface = {
+        0x86E0D1E0, 0x8089, 0x11D0,
+        {0x9C, 0xE4, 0x08, 0x00, 0x3E, 0x30, 0x1F, 0x73}};
+
+    void RegisterComPortNotifications(HWND hwnd) {
+        DEV_BROADCAST_DEVICEINTERFACE filter = {};
+        filter.dbcc_size = sizeof(filter);
+        filter.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
+        filter.dbcc_classguid = kComPortIface;
+        g_devNotify = RegisterDeviceNotificationW(
+            hwnd, &filter, DEVICE_NOTIFY_WINDOW_HANDLE);
+        if (!g_devNotify) Log("ERROR", "RegisterDeviceNotification failed");
+    }
+
+    // Scan + open when a matching device arrives.
+    void OnDeviceArrived() {
+        if (auto port = ScanForDevice(Config::VID, Config::PID)) {
+            g_device.OpenPort(*port);
+        }
+    }
 
     void AddTrayIcon(HWND hwnd) {
         g_nid.cbSize = sizeof(g_nid);
@@ -51,6 +77,22 @@ namespace {
             if (LOWORD(lparam) == WM_RBUTTONUP || LOWORD(lparam) == WM_CONTEXTMENU) {
                 ShowContextMenu(hwnd);
             }
+            return 0;
+
+        case WM_DEVICECHANGE:
+            if (wparam == DBT_DEVICEARRIVAL) {
+                PostMessageW(hwnd, WM_APP_DEVICE_ARRIVED, 0, 0);
+            } else if (wparam == DBT_DEVICEREMOVECOMPLETE) {
+                PostMessageW(hwnd, WM_APP_DEVICE_REMOVED, 0, 0);
+            }
+            return TRUE;
+
+        case WM_APP_DEVICE_ARRIVED:
+            OnDeviceArrived();
+            return 0;
+
+        case WM_APP_DEVICE_REMOVED:
+            g_device.ClosePort();
             return 0;
 
         case WM_COMMAND:
@@ -94,12 +136,17 @@ int main() {
     }
 
     AddTrayIcon(hwnd);
+    RegisterComPortNotifications(hwnd);
+    OnDeviceArrived(); // device may already be connected at launch
 
     MSG msg;
     while (GetMessageW(&msg, nullptr, 0, 0) > 0) {
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
+
+    if (g_devNotify) UnregisterDeviceNotification(g_devNotify);
+    g_device.ClosePort();
 
     Log("INFO", "shutdown");
     return 0;
