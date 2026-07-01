@@ -56,10 +56,25 @@ namespace {
         if (g_device.IsConnected() && g_state.TakeDirty()) SendNow();
     }
 
-    // Scan + open when a matching device arrives; push full state immediately.
-    void OnDeviceArrived() {
+    constexpr UINT_PTR kReconnectTimer = 1;
+    constexpr UINT kReconnectDelayMs = 2000;
+
+    // Scan + open once; push full state on success. Returns true if connected.
+    bool TryConnect() {
+        if (g_device.IsConnected()) return true;
         if (auto port = ScanForDevice(Config::VID, Config::PID)) {
-            if (g_device.OpenPort(*port)) SendNow();
+            if (g_device.OpenPort(*port)) {
+                SendNow();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Attempt connect; on failure retry after a backoff instead of immediately.
+    void OnDeviceArrived(HWND hwnd) {
+        if (!TryConnect()) {
+            SetTimer(hwnd, kReconnectTimer, kReconnectDelayMs, nullptr);
         }
     }
 
@@ -111,11 +126,18 @@ namespace {
             return TRUE;
 
         case WM_APP_DEVICE_ARRIVED:
-            OnDeviceArrived();
+            OnDeviceArrived(hwnd);
             return 0;
 
         case WM_APP_DEVICE_REMOVED:
+            KillTimer(hwnd, kReconnectTimer);
             g_device.ClosePort();
+            return 0;
+
+        case WM_TIMER:
+            if (wparam == kReconnectTimer) {
+                if (TryConnect()) KillTimer(hwnd, kReconnectTimer);
+            }
             return 0;
 
         case WM_APP_STATE_CHANGED:
@@ -175,7 +197,7 @@ int main() {
 
     AddTrayIcon(hwnd);
     RegisterComPortNotifications(hwnd);
-    OnDeviceArrived(); // device may already be connected at launch
+    OnDeviceArrived(hwnd); // device may already be connected at launch
     g_audio.Start(hwnd, &g_state);
     g_media.Start(hwnd, &g_state);
 
