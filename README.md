@@ -8,8 +8,10 @@ virtual COM port, a few times per second:
 - **system volume** — including mute state
 - **default audio output device** — the name of whatever endpoint is currently selected
 
-The dock is a USB CDC device; this app is the host half. Firmware lives with the
-[STM32 dock projects](https://github.com/michaljj/volume-dock-firmware).
+The dock is a USB CDC device; this app is the host half. The current firmware — the
+STM32C552 board driving the LCD — lives alongside this project in the workspace and is
+not published yet. [`volume-dock-firmware`](https://github.com/michaljj/volume-dock-firmware)
+is the earlier F411 dev-board prototype, kept for reference.
 
 ---
 
