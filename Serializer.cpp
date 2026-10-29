@@ -33,6 +33,8 @@ namespace {
 std::string SerializeState(const AppState& s) {
     std::string out = "{\"vol\":";
     out += std::to_string(s.volume);
+    out += ",\"mute\":";
+    out += s.muted ? "true" : "false";
     out += ",\"dev\":";  AppendEscaped(out, s.deviceName);
     out += ",\"title\":"; AppendEscaped(out, s.title);
     out += ",\"artist\":"; AppendEscaped(out, s.artist);

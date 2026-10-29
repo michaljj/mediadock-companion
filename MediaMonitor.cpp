@@ -31,6 +31,10 @@ void MediaMonitor::Start(HWND notifyHwnd, StateStore* store) {
     hwnd_ = notifyHwnd;
     store_ = store;
     stopEvent_ = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    if (!stopEvent_) {
+        Log("ERROR", "MediaMonitor CreateEvent failed");
+        return;
+    }
     thread_ = std::thread(&MediaMonitor::ThreadMain, this);
 }
 

@@ -32,7 +32,9 @@ namespace {
                                   reinterpret_cast<LPBYTE>(name), &size);
         RegCloseKey(key);
         if (r != ERROR_SUCCESS || type != REG_SZ) return std::nullopt;
-        return std::wstring(name);
+        // Registry strings are not guaranteed null-terminated; bound the read
+        // to the buffer so a value that fills it cannot over-read.
+        return std::wstring(name, wcsnlen(name, ARRAYSIZE(name)));
     }
 }
 
@@ -51,29 +53,30 @@ std::optional<std::wstring> ScanForDevice(USHORT vid, USHORT pid) {
     SP_DEVINFO_DATA data = {};
     data.cbSize = sizeof(data);
 
-    for (DWORD i = 0; SetupDiEnumDeviceInfo(set, i, &data); ++i) {
+    for (DWORD i = 0; SetupDiEnumDeviceInfo(set, i, &data) && !result; ++i) {
         wchar_t hwid[512] = {};
         if (!SetupDiGetDeviceRegistryPropertyW(set, &data, SPDRP_HARDWAREID,
                 nullptr, reinterpret_cast<PBYTE>(hwid), sizeof(hwid), nullptr)) {
             continue;
         }
 
-        // Uppercase for case-insensitive contains.
-        std::wstring id(hwid);
-        for (wchar_t& c : id) c = towupper(c);
+        // SPDRP_HARDWAREID is REG_MULTI_SZ: check every null-terminated id,
+        // not just the first, so a match on any of them counts.
+        for (const wchar_t* p = hwid; *p; p += wcslen(p) + 1) {
+            std::wstring id(p);
+            for (wchar_t& c : id) c = towupper(c);   // case-insensitive contains
 
-        if (id.find(vidTok) != std::wstring::npos &&
-            id.find(pidTok) != std::wstring::npos) {
-            if (auto port = ReadPortName(set, data)) {
-                Log("INFO", "device match on port");
-                result = port;
+            if (id.find(vidTok) != std::wstring::npos &&
+                id.find(pidTok) != std::wstring::npos) {
+                if (auto port = ReadPortName(set, data)) {
+                    result = port;
+                }
                 break;
             }
         }
     }
 
     SetupDiDestroyDeviceInfoList(set);
-    if (!result) Log("INFO", "no matching device found");
     return result;
 }
 
@@ -101,6 +104,8 @@ bool DeviceManager::OpenPort(const std::wstring& port) {
         dcb.Parity = NOPARITY;
         dcb.StopBits = ONESTOPBIT;
         SetCommState(handle_, &dcb);
+    } else {
+        Log("WARN", "GetCommState failed; port left unconfigured");
     }
 
     COMMTIMEOUTS to = {};

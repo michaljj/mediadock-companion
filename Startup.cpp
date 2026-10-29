@@ -34,7 +34,8 @@ void SetAutostart(bool enable) {
         return;
     }
     if (enable) {
-        std::wstring path = ExePath();
+        // Quote the path so a spaced install dir (e.g. Program Files) is one token.
+        std::wstring path = L"\"" + ExePath() + L"\"";
         RegSetValueExW(key, Config::AUTOSTART_VALUE, 0, REG_SZ,
                        reinterpret_cast<const BYTE*>(path.c_str()),
                        static_cast<DWORD>((path.size() + 1) * sizeof(wchar_t)));

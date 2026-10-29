@@ -1,10 +1,11 @@
 // StateStore.cpp
 #include "StateStore.h"
 
-void StateStore::SetVolume(int v) {
+void StateStore::SetVolume(int v, bool muted) {
     std::lock_guard<std::mutex> lock(mutex_);
-    if (state_.volume != v) {
+    if (state_.volume != v || state_.muted != muted) {
         state_.volume = v;
+        state_.muted = muted;
         dirty_ = true;
     }
 }

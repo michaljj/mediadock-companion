@@ -104,14 +104,16 @@ void AudioMonitor::Start(HWND notifyHwnd, StateStore* store) {
     BindDefaultEndpoint();
 
     // Seed initial state and force a first send.
-    store_->SetVolume(GetCurrentVolume());
-    store_->SetDeviceName(GetCurrentDeviceName());
-    PostChanged();
+    store_->SetVolume(ReadVolume(), ReadMute());
+    store_->SetDeviceName(ReadDeviceName());
+    if (hwnd_) PostMessageW(hwnd_, WM_APP_STATE_CHANGED, 0, 0);
     Log("INFO", "AudioMonitor started");
 }
 
 void AudioMonitor::Stop() {
-    std::lock_guard<std::mutex> lock(mutex_);
+    // Runs on the UI thread after the message loop ends. The COM callbacks only
+    // PostMessage (they never take a lock or touch these objects), so the
+    // Unregister* calls here cannot deadlock against an in-flight callback.
     if (endpointVol_ && volCb_) endpointVol_->UnregisterControlChangeNotify(volCb_);
     SafeRelease(endpointVol_);
     SafeRelease(device_);
@@ -122,7 +124,6 @@ void AudioMonitor::Stop() {
 }
 
 void AudioMonitor::BindDefaultEndpoint() {
-    std::lock_guard<std::mutex> lock(mutex_);
     // Unbind previous endpoint.
     if (endpointVol_ && volCb_) endpointVol_->UnregisterControlChangeNotify(volCb_);
     SafeRelease(endpointVol_);
@@ -141,20 +142,21 @@ void AudioMonitor::BindDefaultEndpoint() {
     }
 }
 
-void AudioMonitor::PostChanged() {
-    if (hwnd_) PostMessageW(hwnd_, WM_APP_STATE_CHANGED, 0, 0);
-}
-
-int AudioMonitor::GetCurrentVolume() {
-    std::lock_guard<std::mutex> lock(mutex_);
+int AudioMonitor::ReadVolume() {
     if (!endpointVol_) return -1;
     float scalar = 0.0f;
     if (FAILED(endpointVol_->GetMasterVolumeLevelScalar(&scalar))) return -1;
     return static_cast<int>(std::lround(scalar * 100.0f));
 }
 
-std::string AudioMonitor::GetCurrentDeviceName() {
-    std::lock_guard<std::mutex> lock(mutex_);
+bool AudioMonitor::ReadMute() {
+    if (!endpointVol_) return false;
+    BOOL muted = FALSE;
+    if (FAILED(endpointVol_->GetMute(&muted))) return false;
+    return muted != FALSE;
+}
+
+std::string AudioMonitor::ReadDeviceName() {
     if (!device_) return {};
     IPropertyStore* props = nullptr;
     if (FAILED(device_->OpenPropertyStore(STGM_READ, &props)) || !props) return {};
@@ -170,17 +172,25 @@ std::string AudioMonitor::GetCurrentDeviceName() {
     return name;
 }
 
+// --- posted by the COM callbacks (any thread): only marshal to the UI thread ---
 void AudioMonitor::OnVolumeChanged() {
-    if (!store_) return;
-    store_->SetVolume(GetCurrentVolume());
-    PostChanged();
+    if (hwnd_) PostMessageW(hwnd_, WM_APP_AUDIO_VOLUME, 0, 0);
 }
 
 void AudioMonitor::OnDefaultDeviceChanged() {
+    if (hwnd_) PostMessageW(hwnd_, WM_APP_AUDIO_DEVICE, 0, 0);
+}
+
+// --- run on the UI thread in response to those messages --------------------
+void AudioMonitor::RefreshVolume() {
+    if (!store_) return;
+    store_->SetVolume(ReadVolume(), ReadMute());
+}
+
+void AudioMonitor::RefreshDevice() {
     if (!store_) return;
     BindDefaultEndpoint();
-    store_->SetDeviceName(GetCurrentDeviceName());
-    store_->SetVolume(GetCurrentVolume());
-    PostChanged();
+    store_->SetDeviceName(ReadDeviceName());
+    store_->SetVolume(ReadVolume(), ReadMute());
     Log("INFO", "default device changed");
 }

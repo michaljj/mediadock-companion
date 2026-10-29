@@ -38,7 +38,6 @@ set_target_properties(MediaDockCompanion PROPERTIES
 )
 
 target_link_libraries(MediaDockCompanion PRIVATE
-    Microsoft::CppWinRT
     ole32
     mmdevapi
     setupapi

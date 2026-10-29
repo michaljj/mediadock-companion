@@ -6,6 +6,7 @@
 
 struct AppState {
     int volume = -1;                 // 0..100, -1 = unknown
+    bool muted = false;              // default render endpoint mute state
     std::string deviceName;          // default render device friendly name
     std::string title;
     std::string artist;
@@ -15,7 +16,7 @@ struct AppState {
 // Thread-safe. Any setter that changes a value marks the store dirty.
 class StateStore {
 public:
-    void SetVolume(int v);
+    void SetVolume(int v, bool muted);
     void SetDeviceName(std::string name);
     void SetTrack(std::string title, std::string artist, std::string playback);
 

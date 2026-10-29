@@ -4,34 +4,39 @@
 #include <windows.h>
 #include <mmdeviceapi.h>
 #include <endpointvolume.h>
-#include <mutex>
 #include <string>
 
-// Watches the default render endpoint. On a volume change or default-device
-// change it updates the StateStore and posts WM_APP_STATE_CHANGED to the UI
-// window. COM (CoInitializeEx) must already be initialized on the app.
+// Watches the default render endpoint. The COM change callbacks arrive on
+// internal MMDevAPI threads and do nothing but PostMessage to the UI window;
+// all Core Audio object access (bind + read) happens on the UI thread via the
+// Refresh*() handlers. That keeps every Core Audio object single-threaded, so
+// no lock is needed and Stop() cannot deadlock against an in-flight callback.
+// COM (CoInitializeEx) must already be initialized on the app.
 class AudioMonitor {
 public:
     void Start(HWND notifyHwnd, class StateStore* store);
     void Stop();
 
-    int GetCurrentVolume();            // 0..100, -1 if unavailable
-    std::string GetCurrentDeviceName();
+    // UI-thread handlers for WM_APP_AUDIO_VOLUME / WM_APP_AUDIO_DEVICE:
+    // read Core Audio and update the StateStore.
+    void RefreshVolume();
+    void RefreshDevice();
 
-    // Invoked by the internal COM callbacks (public so the callback classes
-    // can reach them; not part of the intended external surface).
+    // Invoked by the internal COM callbacks on arbitrary threads. They only
+    // PostMessage; they never touch the Core Audio objects below.
     void OnVolumeChanged();
     void OnDefaultDeviceChanged();
 
 private:
     void BindDefaultEndpoint();        // (re)acquires device_ + endpointVol_
-    void UnbindEndpoint();
-    void PostChanged();
+    int ReadVolume();                  // 0..100, -1 if unavailable
+    bool ReadMute();                   // default endpoint mute state
+    std::string ReadDeviceName();
 
     HWND hwnd_ = nullptr;
     StateStore* store_ = nullptr;
 
-    std::mutex mutex_;                 // guards the COM pointers below
+    // Touched only on the UI thread (Start/Stop/Refresh*).
     IMMDeviceEnumerator* enumerator_ = nullptr;
     IMMDevice* device_ = nullptr;
     IAudioEndpointVolume* endpointVol_ = nullptr;

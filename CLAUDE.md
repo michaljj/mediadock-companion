@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project state
 
-MediaDockCompanion is a **Windows C++20 desktop application** scaffold. `MediaDockCompanion.cpp` is currently a Hello-World stub (`main()` prints and returns). The real application has not been written yet — treat the linked libraries as the intended feature surface, not as existing code.
+MediaDockCompanion is a **Windows C++20 desktop application**: a background tray app that pushes now-playing track info, system volume, and default audio device name to a USB-CDC dock over a virtual COM port. It is implemented across `MediaDockCompanion.cpp` (entry, hidden message window, tray, message loop, wiring) plus subsystems: `DeviceManager` (COM-port scan/open), `AudioMonitor` (Core Audio volume + device via callbacks marshalled to the UI thread), `MediaMonitor` (SMTC on its own MTA thread), `StateStore` (mutex-guarded snapshot + dirty flag), `Serializer` (JSON line + COM write), `Startup` (HKCU Run autostart), `Logger`, `Config`, `Util`. See `docs/superpowers/plans/` for the implementation plan.
 
 Linked Windows libraries (see `CMakeLists.txt`) signal the app's planned scope:
 - `mmdevapi` — audio endpoint / device enumeration (Core Audio)
@@ -35,5 +35,5 @@ Build output lands in `out/build/<preset>/`. The vcpkg toolchain path is hardcod
 ## Notes
 
 - No test suite, linter, or CI is configured yet.
-- Not a git repository.
+- Git repository (`.git/` present).
 - The `MediaDockCompanion.exe` at the repo root is a 0-byte placeholder, not a build artifact — real output is under `out/build/`.
