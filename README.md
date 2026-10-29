@@ -1,6 +1,6 @@
 # MediaDockCompanion
 
-Windows tray application for the [MediaDock](https://github.com/michaljj/MediaDock) USB-C dock.
+Windows tray application for the [MediaDock](https://github.com/michaljj/mediadock-hardware) USB-C dock.
 It sits in the notification area and pushes three things to the dock's display over a
 virtual COM port, a few times per second:
 
@@ -9,7 +9,7 @@ virtual COM port, a few times per second:
 - **default audio output device** — the name of whatever endpoint is currently selected
 
 The dock is a USB CDC device; this app is the host half. Firmware lives with the
-[STM32 dock projects](https://github.com/michaljj/STM32VolumeDockRTOS).
+[STM32 dock projects](https://github.com/michaljj/volume-dock-firmware).
 
 ---
 
