@@ -23,26 +23,40 @@ target_compile_features(WinApp PRIVATE cxx_std_20)
 # Unit tests (ctest -C Debug)
 # ---------------------------------------------------------------------------
 enable_testing()
-add_executable(serializer_test tests/test_serializer.cpp)
-target_sources(serializer_test PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/serializer.cpp
-    ../Soft/user_app/src/protocol.c)
-target_include_directories(serializer_test PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/inc
-    ../Soft/user_app/inc)
-target_compile_features(serializer_test PRIVATE cxx_std_20)
-add_test(NAME serializer_test COMMAND serializer_test)
+
+# The firmware decoder lives in its own repository. Point MEDIADOCK_FIRMWARE_DIR
+# at a firmware checkout to cross-check every frame against the real receiver;
+# without it the cross-check tests are skipped and the app still builds.
+set(MEDIADOCK_FIRMWARE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../mediadock-firmware"
+    CACHE PATH "Path to a mediadock-firmware checkout (protocol cross-check)")
+set(FIRMWARE_DECODER "${MEDIADOCK_FIRMWARE_DIR}/user_app/src/protocol.c")
+set(FIRMWARE_INCLUDE "${MEDIADOCK_FIRMWARE_DIR}/user_app/inc")
+if(EXISTS "${FIRMWARE_DECODER}")
+    add_executable(serializer_test tests/test_serializer.cpp)
+    target_sources(serializer_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/serializer.cpp
+        ${FIRMWARE_DECODER})
+    target_include_directories(serializer_test PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/inc
+        ${FIRMWARE_INCLUDE})
+    target_compile_features(serializer_test PRIVATE cxx_std_20)
+    add_test(NAME serializer_test COMMAND serializer_test)
+else()
+    message(STATUS "Firmware decoder not found at ${FIRMWARE_DECODER}; decoder cross-checks disabled")
+endif()
 
 # Firmware-side COBS/CRC/TLV decoder regression tests. The decoder is deliberately
 # freestanding C so the same sources compile both in the STM32 target and on a
 # host toolchain without HAL/FreeRTOS dependencies.
-add_executable(protocol_test
-    tests/test_protocol.c
-    ../Soft/user_app/src/protocol.c)
-target_include_directories(protocol_test PRIVATE
-    ../Soft/user_app/inc)
-target_compile_features(protocol_test PRIVATE c_std_11)
-add_test(NAME protocol_test COMMAND protocol_test)
+if(EXISTS "${FIRMWARE_DECODER}")
+    add_executable(protocol_test
+        tests/test_protocol.c
+        ${FIRMWARE_DECODER})
+    target_include_directories(protocol_test PRIVATE
+        ${FIRMWARE_INCLUDE})
+    target_compile_features(protocol_test PRIVATE c_std_11)
+    add_test(NAME protocol_test COMMAND protocol_test)
+endif()
 
 # Windows SDK import libraries:
 #  - windowsapp.lib : umbrella lib for WinRT (RoGetActivationFactory, etc.)
