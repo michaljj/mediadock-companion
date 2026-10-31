@@ -1,0 +1,7 @@
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/WinApp.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/serializer_test.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/compile-commands.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/tidy.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/RUN_TESTS.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/ALL_BUILD.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/CMakeFiles/ZERO_CHECK.dir

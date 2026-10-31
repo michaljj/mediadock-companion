@@ -1,0 +1,26 @@
+Start testing: Sep 24 15:02 Central European Daylight Time
+----------------------------------------------------------
+1/1 Testing: serializer_test
+1/1 Test: serializer_test
+Command: "C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/Debug/serializer_test.exe"
+Directory: C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build
+"serializer_test" start time: Sep 24 15:02 Central European Daylight Time
+Output:
+----------------------------------------------------------
+[short] frame=109 ok
+[long] frame=737 ok
+[utf8] frame=63 ok
+[empty] frame=35 ok
+[position] frame=38 ok
+[after-thumb] frame=41 ok
+
+All checks passed.
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"serializer_test" end time: Sep 24 15:02 Central European Daylight Time
+"serializer_test" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Sep 24 15:02 Central European Daylight Time

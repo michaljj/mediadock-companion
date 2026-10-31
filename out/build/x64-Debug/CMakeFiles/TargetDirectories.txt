@@ -1,0 +1,3 @@
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/out/build/x64-Debug/CMakeFiles/WinApp.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

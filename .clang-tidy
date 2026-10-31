@@ -1,0 +1,58 @@
+---
+# clang-tidy configuration for the WinApp companion (C++20, MSVC, C++/WinRT + COM).
+#
+# Run with:
+#   cmake --build build --target tidy
+# (this first refreshes compile_commands.json in this directory via the
+#  'compile-commands' target; clang-tidy reads the flags from it)
+#
+# Docs: https://clang.llvm.org/extra/clang-tidy/checks/list.html
+Checks: >
+  -*,
+  bugprone-*,
+  clang-analyzer-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -misc-include-cleaner,
+  -misc-use-anonymous-namespace,
+  -misc-use-internal-linkage,
+  -modernize-use-trailing-return-type,
+  -readability-function-cognitive-complexity,
+  -readability-identifier-length,
+  -readability-implicit-bool-conversion,
+  -readability-magic-numbers
+
+# Warnings only; flip to '*' once you want the target to fail on findings.
+WarningsAsErrors: ''
+
+# Only report findings in our own code (src/, inc/) - never in Windows SDK,
+# C++/WinRT projection or CRT headers.
+HeaderFilterRegex: '/(src|inc)/'
+
+# Let clang-tidy --fix follow .clang-format.
+FormatStyle: file
+
+# Rationale for the disabled checks:
+#  - misc-include-cleaner: would reshuffle/trim includes; our include ORDER is
+#    load-bearing (mmdeviceapi.h defines DEFINE_PROPERTYKEY for
+#    functiondiscoverykeys_devpkey.h).
+#  - modernize-use-trailing-return-type: COM/WinRT style uses leading returns.
+#  - bugprone-easily-swappable-parameters: Win32/COM APIs (HANDLE/HWND/UINT)
+#    trigger this constantly, unfixable at call sites.
+#  - readability-magic-numbers: protocol/HRESULT/COM code is full of literals.
+#  - misc-use-internal-linkage / misc-use-anonymous-namespace: contradictory
+#    style opinions (one wants globals static, the other wants static
+#    functions moved into anonymous namespaces) - pure churn for this code.
+#  - readability-implicit-bool-conversion: Win32/BOOL style converts ints to
+#    bool implicitly everywhere; keep the idiomatic form.
+#
+# Known benign output:
+#  - one 'clang-diagnostic-error' for <cpuid.h>: the Windows SDK's
+#    directxmath.h includes it unconditionally under clang on x86/x64 and the
+#    VS-bundled LLVM does not ship that resource header. Analysis still runs.
+#  - readability-identifier-length: i/j/n loop variables are fine.
+#  - readability-function-cognitive-complexity: the app has long main()/pumps.

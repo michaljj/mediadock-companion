@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\build\CMakeFiles\a824a4e612827eb47ea4337b10ccd24c\tidy.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\build\CMakeFiles\tidy" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{9578116B-F344-3E33-9467-36F1DD16E1C9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

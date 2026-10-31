@@ -1,0 +1,50 @@
+[
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo /TP -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /FoCMakeFiles\\WinApp.dir\\src\\main.cpp.obj /FdCMakeFiles\\WinApp.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\src\\main.cpp",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/src/main.cpp",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/WinApp.dir/src/main.cpp.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo /TP -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /FoCMakeFiles\\WinApp.dir\\src\\serializer.cpp.obj /FdCMakeFiles\\WinApp.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\src\\serializer.cpp",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/src/serializer.cpp",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/WinApp.dir/src/serializer.cpp.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo /TP -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /FoCMakeFiles\\WinApp.dir\\src\\COMPort.cpp.obj /FdCMakeFiles\\WinApp.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\src\\COMPort.cpp",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/src/COMPort.cpp",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/WinApp.dir/src/COMPort.cpp.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo /TP -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\..\\Soft\\user_app\\inc /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /FoCMakeFiles\\serializer_test.dir\\tests\\test_serializer.cpp.obj /FdCMakeFiles\\serializer_test.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\tests\\test_serializer.cpp",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/tests/test_serializer.cpp",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/serializer_test.dir/tests/test_serializer.cpp.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo /TP -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\..\\Soft\\user_app\\inc /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -std:c++20 -MDd /FoCMakeFiles\\serializer_test.dir\\src\\serializer.cpp.obj /FdCMakeFiles\\serializer_test.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\src\\serializer.cpp",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/src/serializer.cpp",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/serializer_test.dir/src/serializer.cpp.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\inc -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\..\\Soft\\user_app\\inc /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -MDd /FoCMakeFiles\\serializer_test.dir\\D_\\Repos\\mine\\mediadock-firmware\\Soft\\user_app\\src\\protocol.c.obj /FdCMakeFiles\\serializer_test.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\Soft\\user_app\\src\\protocol.c",
+  "file": "D:/Repos/mine/mediadock-firmware/Soft/user_app/src/protocol.c",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/serializer_test.dir/D_/Repos/mine/mediadock-firmware/Soft/user_app/src/protocol.c.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\..\\Soft\\user_app\\inc /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -std:c11 -MDd /FoCMakeFiles\\protocol_test.dir\\tests\\test_protocol.c.obj /FdCMakeFiles\\protocol_test.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\WinApp\\tests\\test_protocol.c",
+  "file": "D:/Repos/mine/mediadock-firmware/WinApp/tests/test_protocol.c",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/protocol_test.dir/tests/test_protocol.c.obj"
+},
+{
+  "directory": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.44.35207\\bin\\Hostx64\\x64\\cl.exe\"  /nologo -ID:\\Repos\\mine\\mediadock-firmware\\WinApp\\..\\Soft\\user_app\\inc /DWIN32 /D_WINDOWS /Zi /Ob0 /Od /RTC1 -std:c11 -MDd /FoCMakeFiles\\protocol_test.dir\\D_\\Repos\\mine\\mediadock-firmware\\Soft\\user_app\\src\\protocol.c.obj /FdCMakeFiles\\protocol_test.dir\\ /FS -c D:\\Repos\\mine\\mediadock-firmware\\Soft\\user_app\\src\\protocol.c",
+  "file": "D:/Repos/mine/mediadock-firmware/Soft/user_app/src/protocol.c",
+  "output": "D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/protocol_test.dir/D_/Repos/mine/mediadock-firmware/Soft/user_app/src/protocol.c.obj"
+}
+]

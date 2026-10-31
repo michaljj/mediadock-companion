@@ -1,0 +1,18 @@
+MSBuild version 18.10.1-1.26427.6+3cd27c13e for .NET Framework
+
+  Checking File Globs
+  main.cpp
+  serializer.cpp
+  Generating Code...
+  WinApp.vcxproj -> C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\build\Debug\WinApp.exe
+  serializer.cpp
+  test_serializer.cpp
+  Generating Code...
+  serializer_test.vcxproj -> C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\build\Debug\serializer_test.exe
+Test project C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build
+    Start 1: serializer_test
+1/1 Test #1: serializer_test ..................   Passed    0.12 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.18 sec

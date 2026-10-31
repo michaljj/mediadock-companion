@@ -1,0 +1,8 @@
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/WinApp.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/serializer_test.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/protocol_test.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/compile-commands.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/tidy.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/test.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/edit_cache.dir
+D:/Repos/mine/mediadock-firmware/WinApp/build/compdb/CMakeFiles/rebuild_cache.dir

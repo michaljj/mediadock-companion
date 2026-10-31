@@ -1,0 +1,4 @@
+@echo off
+call "C:\Program Files/Microsoft Visual Studio/18/Community/VC/Auxiliary/Build/vcvars64.bat" || exit /b 1
+"C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -S "C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp" -B "C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/compdb" -G Ninja -DCMAKE_MAKE_PROGRAM="C:\Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe" -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_EXPORT_COMPILE_COMMANDS=ON || exit /b 1
+"C:/Program Files/Microsoft Visual Studio/18/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin/cmake.exe" -E copy_if_different "C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/compdb/compile_commands.json" "C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/compile_commands.json"

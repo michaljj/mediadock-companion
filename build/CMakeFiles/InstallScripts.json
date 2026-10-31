@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/user_data/Repos/STM32/MediaDockSTM32C5/WinApp/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

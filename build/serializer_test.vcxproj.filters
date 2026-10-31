@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\tests\test_serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\src\serializer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\user_data\Repos\STM32\MediaDockSTM32C5\WinApp\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{11C6D25F-F3C4-3511-8E86-F83A91016853}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,30 @@
+{
+  "id": "b603a8728",
+  "name": "build smoke and tidy",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --build build --config Debug && build\\Debug\\WinApp.exe --oneshot --no-thumbnail --bogus && \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --build build --target tidy",
+  "description": "Build, smoke-test --no-thumbnail + unknown-arg handling in oneshot mode, then clang-tidy",
+  "status": "completed",
+  "outputPath": ".pi\\tasks\\01a0cd79-5a17-72ab-b524-db24cd24cd85-14936\\b603a8728.output",
+  "cwd": "C:\\user_data\\Repos\\STM32\\MediaDockSTM32C5\\WinApp",
+  "startTime": 1790166190289,
+  "endTime": 1790166260891,
+  "exitCode": 0,
+  "signal": null,
+  "pid": 2884,
+  "bytesWritten": 28547,
+  "isAgent": false,
+  "surviveReload": false,
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "shellPolicy": {
+    "policy": "cmd",
+    "executable": "C:\\WINDOWS\\system32\\cmd.exe",
+    "argvPrefix": [
+      "/d",
+      "/s",
+      "/c"
+    ],
+    "dialect": "cmd"
+  }
+}

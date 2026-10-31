@@ -1,0 +1,30 @@
+{
+  "id": "bbcd1823e",
+  "name": "rebuild and tidy",
+  "command": "\"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --build build --config Debug && \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe\" --build build --target tidy",
+  "description": "Rebuild after the modernize-use-auto fix and re-run the clang-tidy gate",
+  "status": "completed",
+  "outputPath": ".pi\\tasks\\01a0cd79-5a17-72ab-b524-db24cd24cd85-14936\\bbcd1823e.output",
+  "cwd": "C:\\user_data\\Repos\\STM32\\MediaDockSTM32C5\\WinApp",
+  "startTime": 1790156389890,
+  "endTime": 1790156428337,
+  "exitCode": 0,
+  "signal": null,
+  "pid": 14648,
+  "bytesWritten": 28185,
+  "isAgent": false,
+  "surviveReload": false,
+  "notified": true,
+  "notifyOnCompletion": true,
+  "triggerOnCompletion": true,
+  "shellPolicy": {
+    "policy": "cmd",
+    "executable": "C:\\WINDOWS\\system32\\cmd.exe",
+    "argvPrefix": [
+      "/d",
+      "/s",
+      "/c"
+    ],
+    "dialect": "cmd"
+  }
+}
