@@ -129,6 +129,7 @@ static std::mutex g_serialMutex;
 // whenever a write fails. All of this is guarded by g_serialMutex.
 static bool                                g_dockConnected = false;
 static std::wstring                        g_dockPortName;
+static int                                  g_writeFailures = 0; // consecutive
 static std::chrono::steady_clock::time_point g_nextConnectAttempt{};
 
 // Short text for the Win32 errors WriteFile can produce on this link, so a
@@ -164,6 +165,13 @@ static void EnsureDockConnectedLocked ()
     {
       return;
     }
+  if (!g_dockConnected && g_comPort)
+    {
+      // Half-open state (handle alive, link marked down): drop the handle so
+      // this process cannot end up fighting itself for the COM port, which
+      // shows up as "Access is denied" on the retry and never clears.
+      g_comPort.close ();
+    }
 
   const auto now = std::chrono::steady_clock::now ();
   if (now < g_nextConnectAttempt)
@@ -193,6 +201,7 @@ static void EnsureDockConnectedLocked ()
     }
   catch (std::exception const &e)
     {
+      g_comPort.close ();
       g_dockConnected = false;
       // Retries run every couple of seconds; log them at most every 10 s so a
       // dock that stays absent does not flood the console.
@@ -249,6 +258,7 @@ static bool WriteFrameLocked (size_t frameSize, std::wstring_view frameKind, boo
 
   if (ok && static_cast<size_t> (written) == frameSize)
     {
+      g_writeFailures = 0;
       if (logSuccess)
         {
           std::wcout << L"serial: sent frame, " << written << L" bytes\n";
@@ -273,6 +283,14 @@ static bool WriteFrameLocked (size_t frameSize, std::wstring_view frameKind, boo
       // only part of the frame; the dock then resyncs on the next 0x00.
       std::wcout << L"serial: partial write, " << written << L"/" << frameSize << L" bytes, frame=" << frameKind
                  << L", host tx queue " << before.cbOutQue << L" -> " << after.cbOutQue << L" bytes\n";
+    }
+  // One timeout is often transient (the dock is busy rendering a cover). Keep
+  // the handle and retry next tick; the port is only dropped after a sustained
+  // run of failures, because closing it makes usbser.sys re-open the device and
+  // a dock that suspends mid-open needs a re-enumeration to come back.
+  if (++g_writeFailures < 5)
+    {
+      return false;
     }
   MarkDockLostLocked (ok ? L"partial write" : L"write failed");
   return false;
