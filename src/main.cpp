@@ -181,6 +181,12 @@ static void EnsureDockConnectedLocked ()
   g_nextConnectAttempt = now + std::chrono::seconds (2);
 
   std::wstring portName = findDockPort ();
+  if (portName.empty () && !g_dockPortName.empty ())
+    {
+      /* SetupAPI enumeration can lag right after the device re-enumerates;
+         retry the port that worked before falling back to COM4. */
+      portName = g_dockPortName;
+    }
   if (portName.empty ())
     {
       wchar_t envPort[64]{};
